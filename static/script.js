@@ -1,4 +1,4 @@
-// static/script.js (API 호출 최종본)
+// static/script.js (최종 확인)
 
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -60,11 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
         displaySaunas(filteredData);
     };
     
-    // [수정됨] 페이지 초기화 함수
     const initialize = async () => {
         try {
-            // [수정됨] /api/data API를 호출하여 데이터를 가져오는 방식으로 복원합니다.
-            const response = await fetch('/api/data');
+            // static 폴더의 JSON 파일을 직접 fetch 합니다.
+            const response = await fetch('static/my_data.json');
             if (!response.ok) throw new Error('데이터를 불러오지 못했습니다.');
             
             allSaunas = await response.json();
