@@ -39,14 +39,15 @@ def process_json_file(input_path, output_path):
             search_query = item.get('name_ko')
             
             if search_query:
-                # 검색어: "장소 이름"
-                image_url = search_image_url(search_query)
+                # [수정됨] 검색어를 "[찜질방 이름] 사우나"로 조합합니다.
+                full_query = f"{search_query} 사우나"
+                image_url = search_image_url(full_query)
                 
                 if image_url:
                     item['image_url'] = image_url
-                    print(f"✔️ '{search_query}' 이미지 URL 추가 완료.")
+                    print(f"✔️ '{full_query}' 이미지 URL 추가 완료.")
                 else:
-                    print(f"⚠️ '{search_query}' 이미지 URL을 찾을 수 없습니다.")
+                    print(f"⚠️ '{full_query}' 이미지 URL을 찾을 수 없습니다.")
                 
                 time.sleep(1) # API 호출 제한을 피하기 위해 1초 간격 두기
             else:
@@ -65,7 +66,7 @@ def process_json_file(input_path, output_path):
 
 # 🚀 스크립트 실행
 if __name__ == "__main__":
-    # [수정됨] 어떤 위치에서 실행해도 파일을 정확히 찾도록 절대 경로를 사용합니다.
+    # 어떤 위치에서 실행해도 파일을 정확히 찾도록 절대 경로를 사용합니다.
     basedir = os.path.abspath(os.path.dirname(__file__))
     input_file = os.path.join(basedir, 'static', 'my_data.json')
     output_file = os.path.join(basedir, 'static', 'updated_my_data.json')
