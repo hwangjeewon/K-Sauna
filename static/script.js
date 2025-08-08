@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cardsHtml += `
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="card h-100 shadow-sm">
-                            <img src="${imageUrl}" class="card-img-top" alt="${name}" onerror="this.onerror=null; this.src='${randomFallback}'; this.onerror=function(){ this.src='${finalFallback}'; };">
+                            <img src="${imageUrl}" class="card-img-top" alt="${name}" onerror="this.onerror=()=>{this.onerror=null; this.src='${finalFallback}'}; this.src='${randomFallback}';">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">${name}</h5>
                                 <p class="card-text text-muted flex-grow-1">${address}</p>
