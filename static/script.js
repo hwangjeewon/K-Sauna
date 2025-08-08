@@ -10,31 +10,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let allSaunas = [];
 
-    // [수정됨] 선호하는 하단 3개 이미지를 여러 번 추가하여 가중치를 부여합니다.
+    // [수정됨] 새로운 URL로 교체하고, 선호도에 따라 가중치를 부여합니다.
     const fallbackImages = [
-        // 일반 이미지
-        'https://thumbnews.nateimg.co.kr/view610///news.nateimg.co.kr/orgImg/at/2025/07/11/20250711001747208_1752224347_2.jpg',
+        // 덜 선호하는 이미지 (각 1번씩)
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_DOBmrLk0nfaLyvq-OC-nBxWtISid9EN5ycwIFIaZkcXaeovozxlBitD1hFtebCAFrMs&usqp=CAU',
-        'https://i.namu.wiki/i/1Ys8WVkTy2Qckyk6Ow31xuyZwA__BvETvarbIVt7H5KvqTamO9kqTfSx9VyjfN_OtBjcZCWOmC0LAyaUtiB40A.webp',
         'https://i.namu.wiki/i/v9lc4Q3ynexdoCjiZvhDEUmBo2rcsirmVOt4JBC89uxnbi4a7PbznGxkqaYgED7e0HbNmflpSnu7xv7bbAKQWA.webp',
-        'https://i.namu.wiki/i/ssZkF4depYWudkufVjU7F0QxhCjJJxQIPn3OODLDXcxRII_h50lI0JJiAWsz-9XyfySNDK5Hc8MFATDZh4RHNQ.webp',
+        'https://i.namu.wiki/i/1Ys8WVkTy2Qckyk6Ow31xuyZwA__BvETvarbIVt7H5KvqTamO9kqTfSx9VyjfN_OtBjcZCWOmC0LAyaUtiB40A.webp',
         
-        // 선호 이미지 (각 4번씩 추가하여 확률 증가)
-        'https://tourteller.com/blog/wp-content/uploads/2020/07/Korean-spa-1.jpg',
-        'https://www.korea.net/upload/fileShare/2023/08/usr_1690865489359.jpg',
-        'https://img.khan.co.kr/news/2020/01/05/l_2020010301000328500021691.jpg',
-        'https://tourteller.com/blog/wp-content/uploads/2020/07/Korean-spa-1.jpg',
-        'https://www.korea.net/upload/fileShare/2023/08/usr_1690865489359.jpg',
-        'https://img.khan.co.kr/news/2020/01/05/l_2020010301000328500021691.jpg',
-        'https://tourteller.com/blog/wp-content/uploads/2020/07/Korean-spa-1.jpg',
-        'https://www.korea.net/upload/fileShare/2023/08/usr_1690865489359.jpg',
-        'https://img.khan.co.kr/news/2020/01/05/l_2020010301000328500021691.jpg',
-        'https://tourteller.com/blog/wp-content/uploads/2020/07/Korean-spa-1.jpg',
-        'https://www.korea.net/upload/fileShare/2023/08/usr_1690865489359.jpg',
-        'https://img.khan.co.kr/news/2020/01/05/l_2020010301000328500021691.jpg'
+        // 더 선호하는 이미지 (각 3번씩 추가하여 확률 증가)
+        'https://img.activityjapan.com/wi/sauna-category2.jpg',
+        'https://www.cheongpungresort.co.kr/web/kor/images/facilities/hill_herbalSauna1.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDCkK1_kaVhU2tQAeGQAvJKYuObj52TIOgvlsth0dDqvRWs7rBZc0T0bE27wsqIUlI1Ko&usqp=CAU',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF5H-nTKl86TwBUZBcc_AuVUf53tl85brg1Q&s',
+        'https://img.activityjapan.com/wi/sauna-category2.jpg',
+        'https://www.cheongpungresort.co.kr/web/kor/images/facilities/hill_herbalSauna1.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDCkK1_kaVhU2tQAeGQAvJKYuObj52TIOgvlsth0dDqvRWs7rBZc0T0bE27wsqIUlI1Ko&usqp=CAU',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF5H-nTKl86TwBUZBcc_AuVUf53tl85brg1Q&s',
+        'https://img.activityjapan.com/wi/sauna-category2.jpg',
+        'https://www.cheongpungresort.co.kr/web/kor/images/facilities/hill_herbalSauna1.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDCkK1_kaVhU2tQAeGQAvJKYuObj52TIOgvlsth0dDqvRWs7rBZc0T0bE27wsqIUlI1Ko&usqp=CAU',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF5H-nTKl86TwBUZBcc_AuVUf53tl85brg1Q&s'
     ];
     
-    // [추가됨] 이전에 사용된 랜덤 이미지 인덱스를 추적하는 변수
     let lastRandomIndex = -1;
 
     const debounce = (func, delay) => {
@@ -58,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const address = sauna[`address_${currentLang}`] || sauna['address_ko'];
                 const imageUrl = sauna.image_url || 'https://placehold.co/600x400/EFEFEF/777777?text=No+Image';
 
-                // [수정됨] 이전에 사용된 이미지와 다른 랜덤 이미지를 선택하는 로직
                 let randomIndex;
                 do {
                     randomIndex = Math.floor(Math.random() * fallbackImages.length);
@@ -66,13 +62,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 lastRandomIndex = randomIndex;
                 const randomFallback = fallbackImages[randomIndex];
                 
-                // [수정됨] 이중 안전장치: 랜덤 이미지가 또 실패하면, 최종 기본 이미지를 보여줍니다.
                 const finalFallback = 'https://placehold.co/600x400/EFEFEF/777777?text=Image+Not+Available';
 
+                // [수정됨] onerror 로직을 더 안정적인 형태로 강화했습니다.
                 cardsHtml += `
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="card h-100 shadow-sm">
-                            <img src="${imageUrl}" class="card-img-top" alt="${name}" onerror="this.onerror=()=>{this.onerror=null; this.src='${finalFallback}'}; this.src='${randomFallback}';">
+                            <img src="${imageUrl}" class="card-img-top" alt="${name}" 
+                                 onerror="this.onerror=function(){this.src='${finalFallback}';}; this.src='${randomFallback}';">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">${name}</h5>
                                 <p class="card-text text-muted flex-grow-1">${address}</p>
