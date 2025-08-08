@@ -1,4 +1,4 @@
-// static/script.js (최종 확인)
+// static/script.js (대체 이미지 수정)
 
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cardsHtml += `
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="card h-100 shadow-sm">
-                            <img src="${imageUrl}" class="card-img-top" alt="${name}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/EFEFEF/777777?text=Image+Error';">
+                            <img src="${imageUrl}" class="card-img-top" alt="${name}" onerror="this.onerror=null;this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_DOBmrLk0nfaLyvq-OC-nBxWtISid9EN5ycwIFIaZkcXaeovozxlBitD1hFtebCAFrMs&usqp=CAU';">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">${name}</h5>
                                 <p class="card-text text-muted flex-grow-1">${address}</p>
