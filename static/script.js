@@ -33,6 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'https://www.korea.net/upload/fileShare/2023/08/usr_1690865489359.jpg',
         'https://img.khan.co.kr/news/2020/01/05/l_2020010301000328500021691.jpg'
     ];
+    
+    // [추가됨] 이전에 사용된 랜덤 이미지 인덱스를 추적하는 변수
+    let lastRandomIndex = -1;
 
     const debounce = (func, delay) => {
         let timeoutId;
@@ -55,14 +58,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 const address = sauna[`address_${currentLang}`] || sauna['address_ko'];
                 const imageUrl = sauna.image_url || 'https://placehold.co/600x400/EFEFEF/777777?text=No+Image';
 
-                const randomFallback = fallbackImages[Math.floor(Math.random() * fallbackImages.length)];
+                // [수정됨] 이전에 사용된 이미지와 다른 랜덤 이미지를 선택하는 로직
+                let randomIndex;
+                do {
+                    randomIndex = Math.floor(Math.random() * fallbackImages.length);
+                } while (fallbackImages.length > 1 && randomIndex === lastRandomIndex);
+                lastRandomIndex = randomIndex;
+                const randomFallback = fallbackImages[randomIndex];
+                
                 // [수정됨] 이중 안전장치: 랜덤 이미지가 또 실패하면, 최종 기본 이미지를 보여줍니다.
                 const finalFallback = 'https://placehold.co/600x400/EFEFEF/777777?text=Image+Not+Available';
 
                 cardsHtml += `
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="card h-100 shadow-sm">
-                            <img src="${imageUrl}" class="card-img-top" alt="${name}" onerror="this.onerror=null; this.src='${randomFallback}'; this.onerror=function(){this.onerror=null; this.src='${finalFallback}';};">
+                            <img src="${imageUrl}" class="card-img-top" alt="${name}" onerror="this.onerror=null; this.src='${randomFallback}'; this.onerror=function(){ this.src='${finalFallback}'; };">
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">${name}</h5>
                                 <p class="card-text text-muted flex-grow-1">${address}</p>
