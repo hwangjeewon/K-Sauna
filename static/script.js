@@ -1,4 +1,4 @@
-// static/script.js (대체 이미지 수정)
+// static/script.js (카드 클릭 기능 추가)
 
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -10,28 +10,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let allSaunas = [];
 
-    // [수정됨] 새로운 URL로 교체하고, 선호도에 따라 가중치를 부여합니다.
     const fallbackImages = [
-        // 덜 선호하는 이미지 (각 1번씩)
+        'https://thumbnews.nateimg.co.kr/view610///news.nateimg.co.kr/orgImg/at/2025/07/11/20250711001747208_1752224347_2.jpg',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_DOBmrLk0nfaLyvq-OC-nBxWtISid9EN5ycwIFIaZkcXaeovozxlBitD1hFtebCAFrMs&usqp=CAU',
-        'https://i.namu.wiki/i/v9lc4Q3ynexdoCjiZvhDEUmBo2rcsirmVOt4JBC89uxnbi4a7PbznGxkqaYgED7e0HbNmflpSnu7xv7bbAKQWA.webp',
         'https://i.namu.wiki/i/1Ys8WVkTy2Qckyk6Ow31xuyZwA__BvETvarbIVt7H5KvqTamO9kqTfSx9VyjfN_OtBjcZCWOmC0LAyaUtiB40A.webp',
-        
-        // 더 선호하는 이미지 (각 3번씩 추가하여 확률 증가)
-        'https://img.activityjapan.com/wi/sauna-category2.jpg',
-        'https://www.cheongpungresort.co.kr/web/kor/images/facilities/hill_herbalSauna1.jpg',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDCkK1_kaVhU2tQAeGQAvJKYuObj52TIOgvlsth0dDqvRWs7rBZc0T0bE27wsqIUlI1Ko&usqp=CAU',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF5H-nTKl86TwBUZBcc_AuVUf53tl85brg1Q&s',
-        'https://img.activityjapan.com/wi/sauna-category2.jpg',
-        'https://www.cheongpungresort.co.kr/web/kor/images/facilities/hill_herbalSauna1.jpg',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDCkK1_kaVhU2tQAeGQAvJKYuObj52TIOgvlsth0dDqvRWs7rBZc0T0bE27wsqIUlI1Ko&usqp=CAU',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF5H-nTKl86TwBUZBcc_AuVUf53tl85brg1Q&s',
-        'https://img.activityjapan.com/wi/sauna-category2.jpg',
-        'https://www.cheongpungresort.co.kr/web/kor/images/facilities/hill_herbalSauna1.jpg',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDCkK1_kaVhU2tQAeGQAvJKYuObj52TIOgvlsth0dDqvRWs7rBZc0T0bE27wsqIUlI1Ko&usqp=CAU',
-        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF5H-nTKl86TwBUZBcc_AuVUf53tl85brg1Q&s'
+        'https://i.namu.wiki/i/v9lc4Q3ynexdoCjiZvhDEUmBo2rcsirmVOt4JBC89uxnbi4a7PbznGxkqaYgED7e0HbNmflpSnu7xv7bbAKQWA.webp',
+        'https://i.namu.wiki/i/ssZkF4depYWudkufVjU7F0QxhCjJJxQIPn3OODLDXcxRII_h50lI0JJiAWsz-9XyfySNDK5Hc8MFATDZh4RHNQ.webp',
+        'https://tourteller.com/blog/wp-content/uploads/2020/07/Korean-spa-1.jpg',
+        'https://www.korea.net/upload/fileShare/2023/08/usr_1690865489359.jpg',
+        'https://img.khan.co.kr/news/2020/01/05/l_2020010301000328500021691.jpg'
     ];
-    
     let lastRandomIndex = -1;
 
     const debounce = (func, delay) => {
@@ -61,20 +49,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 } while (fallbackImages.length > 1 && randomIndex === lastRandomIndex);
                 lastRandomIndex = randomIndex;
                 const randomFallback = fallbackImages[randomIndex];
-                
                 const finalFallback = 'https://placehold.co/600x400/EFEFEF/777777?text=Image+Not+Available';
 
-                // [수정됨] onerror 로직을 더 안정적인 형태로 강화했습니다.
+                // [수정됨] 카카오맵 검색 URL을 생성합니다.
+                const encodedName = encodeURIComponent(sauna.name_ko);
+                const kakaoMapUrl = `https://map.kakao.com/link/search/${encodedName}`;
+
+                // [수정됨] 카드 전체를 a 태그로 감싸서 클릭 가능하게 만듭니다.
                 cardsHtml += `
                     <div class="col-md-6 col-lg-4 mb-4">
-                        <div class="card h-100 shadow-sm">
-                            <img src="${imageUrl}" class="card-img-top" alt="${name}" 
-                                 onerror="this.onerror=function(){this.src='${finalFallback}';}; this.src='${randomFallback}';">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">${name}</h5>
-                                <p class="card-text text-muted flex-grow-1">${address}</p>
+                        <a href="${kakaoMapUrl}" target="_blank" class="text-decoration-none text-dark">
+                            <div class="card h-100 shadow-sm">
+                                <img src="${imageUrl}" class="card-img-top" alt="${name}" 
+                                     onerror="this.onerror=function(){this.src='${finalFallback}';}; this.src='${randomFallback}';">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title">${name}</h5>
+                                    <p class="card-text text-muted flex-grow-1">${address}</p>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 `;
             });
@@ -97,7 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const initialize = async () => {
         try {
-            // static 폴더의 JSON 파일을 직접 fetch 합니다.
             const response = await fetch('static/my_data.json');
             if (!response.ok) throw new Error('데이터를 불러오지 못했습니다.');
             
