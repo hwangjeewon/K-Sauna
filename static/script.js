@@ -1,14 +1,29 @@
-// static/script.js (카드 클릭 기능 추가)
+// static/script.js (UI 번역 기능 추가)
 
 document.addEventListener('DOMContentLoaded', () => {
     
     const saunaContainer = document.getElementById('sauna-container');
     const searchInput = document.getElementById('search-input');
-    const langEnButton = document.getElementById('lang-en');
-    const langJaButton = document.getElementById('lang-ja');
-    const langKoButton = document.getElementById('lang-ko');
+    // [추가됨] 번역할 부제목 요소를 가져옵니다.
+    const subtitleElement = document.getElementById('header-subtitle');
 
     let allSaunas = [];
+
+    // [추가됨] 언어별 텍스트를 저장하는 객체
+    const translations = {
+        ko: {
+            subtitle: '대한민국 전국의 사우나와 찜질방 정보를 찾아보세요.',
+            placeholder: '찜질방 이름으로 검색'
+        },
+        en: {
+            subtitle: 'Find saunas and jjimjilbangs all across South Korea.',
+            placeholder: 'Search by jjimjilbang name'
+        },
+        ja: {
+            subtitle: '韓国全国のサウナやチムジルバンを探しましょう。',
+            placeholder: 'チムジルバン名で検索'
+        }
+    };
 
     const fallbackImages = [
         'https://thumbnews.nateimg.co.kr/view610///news.nateimg.co.kr/orgImg/at/2025/07/11/20250711001747208_1752224347_2.jpg',
@@ -86,6 +101,12 @@ document.addEventListener('DOMContentLoaded', () => {
         displaySaunas(filteredData);
     };
     
+    // [추가됨] 헤더의 정적 텍스트를 번역하는 함수
+    const updateStaticText = (lang) => {
+        subtitleElement.textContent = translations[lang].subtitle;
+        searchInput.placeholder = translations[lang].placeholder;
+    };
+
     const initialize = async () => {
         try {
             const response = await fetch('static/my_data.json');
@@ -105,14 +126,21 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.btn-group .btn').forEach(button => {
         button.addEventListener('click', (e) => {
             document.querySelector('.btn-group .active')?.classList.remove('active');
-            e.currentTarget.classList.add('active');
-            e.currentTarget.dataset.lang = e.currentTarget.id.replace('lang-', '');
+            const clickedButton = e.currentTarget;
+            clickedButton.classList.add('active');
+            const lang = clickedButton.id.replace('lang-', '');
+            clickedButton.dataset.lang = lang;
+            
+            // [수정됨] 언어 변경 시, 정적 텍스트와 카드 목록을 모두 업데이트합니다.
+            updateStaticText(lang);
             applyFilters();
         });
     });
     
-    langKoButton.classList.add('active');
-    langKoButton.dataset.lang = 'ko';
+    // 페이지 로딩 시 기본 언어(한국어) 버튼을 활성화하고 텍스트를 설정합니다.
+    document.getElementById('lang-ko').classList.add('active');
+    document.getElementById('lang-ko').dataset.lang = 'ko';
+    updateStaticText('ko');
     
     initialize();
 });
