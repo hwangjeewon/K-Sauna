@@ -5,20 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Korean Sauna & Jjimjilbang Guide</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- [수정됨] Flask 문법을 제거하고, 일반적인 경로로 수정합니다. -->
     <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
 
-    <!-- [수정됨] 헤더의 최소 높이를 80vh로 두 배 늘렸습니다. -->
     <header class="py-5 text-white d-flex align-items-center" style="min-height: 80vh; background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://pimg.mk.co.kr/news/cms/202506/25/news-p.v1.20250625.bad6e786fa6d4266838751fde7c61a24_P1.jpg'); background-size: cover; background-position: center;">
         <div class="container">
             <div class="text-center mb-4">
                 <h1 class="fw-bold">Korean Sauna & Jjimjilbang Guide</h1>
-                <p class="lead">대한민국 전국의 사우나와 찜질방 정보를 찾아보세요.</p>
+                <!-- [수정됨] 부제목에 id를 추가했습니다. -->
+                <p class="lead" id="header-subtitle">대한민국 전국의 사우나와 찜질방 정보를 찾아보세요.</p>
             </div>
             <div class="row justify-content-center g-2">
                 <div class="col-md-8">
+                    <!-- 검색창은 이미 id="search-input"을 가지고 있습니다. -->
                     <input type="text" class="form-control" id="search-input" placeholder="찜질방 이름으로 검색...">
                 </div>
                 <div class="col-auto">
@@ -38,10 +38,7 @@
         </div>
     </main>
     
-    <!-- [수정됨] 데이터를 주입받던 script 태그를 완전히 삭제했습니다. -->
-    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- [수정됨] Flask 문법을 제거하고, 일반적인 경로로 수정합니다. -->
     <script src="static/script.js"></script>
 </body>
 </html>

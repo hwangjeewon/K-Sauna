@@ -51,11 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const randomFallback = fallbackImages[randomIndex];
                 const finalFallback = 'https://placehold.co/600x400/EFEFEF/777777?text=Image+Not+Available';
 
-                // [수정됨] 카카오맵 검색 URL을 생성합니다.
                 const encodedName = encodeURIComponent(sauna.name_ko);
                 const kakaoMapUrl = `https://map.kakao.com/link/search/${encodedName}`;
 
-                // [수정됨] 카드 전체를 a 태그로 감싸서 클릭 가능하게 만듭니다.
                 cardsHtml += `
                     <div class="col-md-6 col-lg-4 mb-4">
                         <a href="${kakaoMapUrl}" target="_blank" class="text-decoration-none text-dark">
